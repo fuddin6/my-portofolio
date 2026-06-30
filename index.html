@@ -1,496 +1,813 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portofolio Muhamad Nur Saifuddin - Teknologi Informasi</title>
-  <style>
-    /* Styling yang sudah DIBERSIHKAN dari karakter yang tidak valid */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    body {
-      background-color: #0d0d0d;
-      color: #f1f1f1;
-      line-height: 1.6;
-    }
-
-    header {
-      background: #111;
-      padding: 20px 50px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    header h1 {
-      color: #00bfff;
-      font-size: 1.5em;
-      letter-spacing: 1px;
-    }
-
-    nav a {
-      color: #f1f1f1;
-      margin-left: 20px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-
-    nav a:hover {
-      color: #00bfff;
-    }
-
-    .hero, section {
-      opacity: 0; 
-      transform: translateY(20px); 
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
-    }
-    
-    .hero.loaded, section.loaded {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      height: 90vh;
-      padding: 0 20px;
-    } 
-    
-    /* STYLING FOTO WAJAH (CAROUSEL) */
-    .hero-photo-carousel {
-        width: 150px;
-        height: 150px;
-        overflow: hidden;
-        border-radius: 50%;
-        border: 4px solid #00bfff;
-        margin-bottom: 25px;
-        position: relative;
-    }
-
-    .hero-photo-carousel img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        position: absolute;
-        top: 0;
-        left: 0;
-        opacity: 0;
-        transition: opacity 1s ease-in-out; 
-    }
-
-    .hero-photo-carousel img.active {
-        opacity: 1;
-    }
-    /* AKHIR STYLING FOTO WAJAH */
-
-    .hero h2 {
-      font-size: 2.5em;
-      color: #fff;
-    }
-
-    .hero p {
-      max-width: 600px;
-      margin: 15px 0;
-      color: #ccc;
-    }
-
-    .hero button {
-      background: #00bfff;
-      color: #fff;
-      border: none;
-      padding: 10px 25px;
-      font-size: 1em;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .hero button:hover {
-      background: #009acd;
-    }
-
-    section {
-      padding: 60px 50px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    h3.section-title {
-      font-size: 1.8em;
-      color: #00bfff;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .about p {
-      text-align: center;
-      color: #ccc;
-      font-size: 1.1em;
-    }
-
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .skill {
-      background: #111;
-      padding: 10px 20px;
-      border: 1px solid #00bfff;
-      border-radius: 20px;
-      color: #fff;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-
-    .skill:hover {
-      background: #00bfff;
-      color: #0d0d0d;
-    }
-
-    .project-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .project {
-      background: #111;
-      padding: 20px;
-      border-radius: 10px;
-      transition: transform 0.3s ease, border 0.3s ease;
-      cursor: pointer;
-    }
-
-    .project:hover {
-      transform: translateY(-5px);
-      border: 1px solid #00bfff;
-    }
-
-    .project h4 {
-      color: #00bfff;
-      margin-bottom: 10px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      border-top: 1px solid #222;
-      color: #999;
-      font-size: 0.9em;
-    }
-
-    .popup {
-      display: none; 
-      position: fixed;
-      z-index: 999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      
-      opacity: 0; 
-      visibility: hidden; 
-      transition: opacity 0.4s ease, visibility 0.4s ease; 
-    }
-    
-    .popup.open {
-        visibility: visible;
-        opacity: 1;
-    }
-
-    .popup img {
-      width: 80%;
-      max-width: 600px;
-      border-radius: 10px;
-    }
-
-    .popup .controls {
-      margin-top: 15px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    .popup button {
-      background: #00bfff;
-      border: none;
-      color: white;
-      padding: 8px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .popup button:hover {
-      background: #009acd;
-    }
-
-    .popup a {
-      margin-top: 20px;
-      color: #00bfff;
-      text-decoration: none;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      color: #fff;
-      font-size: 2em;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-    
-    .close-btn:hover {
-        color: #00bfff;
-    }
-
-    /* Responsif */
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      nav {
-        margin-top: 10px;
-      }
-
-      .hero h2 {
-        font-size: 2em;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>M.N.Saifuddin</h1>
-    <nav>
-      <a href="#about">Tentang</a>
-      <a href="#skills">Skill</a>
-      <a href="#experience">Pengalaman</a>
-      <a href="#contact">Kontak</a>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <div class="hero-photo-carousel" id="heroPhotoCarousel">
-        <img src="bg-photo-1.jpg" alt="Foto Wajah Muhamad Nur Saifuddin 1" class="active">
-        <img src="bg-photo-2.jpg" alt="Foto Wajah Muhamad Nur Saifuddin 2">
-    </div>
-    <h2>Halo, Saya Muhamad Nur Saifuddin</h2>
-    <p>Lulusan S1 Teknologi Informasi dari Universitas Bina Sarana Informatika dengan pemahaman mendalam di bidang teknologi. Saya memiliki semangat tinggi untuk terus belajar dan berkembang, serta siap berkontribusi dalam lingkungan profesional yang dinamis.</p>
-    <button onclick="window.location='#experience'">Lihat Pengalaman Saya</button>
-  </section>
-
-  <section id="about" class="about">
-    <h3 class="section-title">Tentang Saya</h3>
-    <p>
-      Lulusan S1 Teknologi Informasi (S.Kom) dari Universitas Bina Sarana Informatika (2021-2025). 
-      Saya memiliki keahlian dalam teknis dalam Jaringan Dasar, Pemrograman Dasar, dan UI/UX Design. 
-      Saya juga menguasai soft skills Komunikasi yang baik, Kerja tim, dan Analisis masalah bersama.
-      Selain Bahasa Indonesia (Fasih), saya memiliki kemampuan Bahasa Inggris dan Arab tingkat Menengah.
-      Selain itu saya juga memiliki kemampuan untuk memanfaatkan teknologi AI untuk membantu pekerjaan saya dan mengembangkan ilmu yang saya punya.
-    </p>
-  </section>
-
-  <section id="skills" class="skills">
-    <h3 class="section-title">Keahlian & Tools</h3>
-    <div class="skills-list">
-      <div class="skill">Basic Jaringan Dasar</div>
-      <div class="skill">Basic Pemrograman Dasar</div>
-      <div class="skill">UI/UX Design</div>
-      
-      <div class="skill">Microsoft Office (Word, Excel, PowerPoint)</div>
-      <div class="skill">Visual Studio Code</div>
-      <div class="skill">Figma</div>
-      <div class="skill">Canva</div>
-      <div class="skill">Corel Draw</div>
-      
-      <div class="skill">Network Security (Cisco)</div>
-      <div class="skill">Pengembang Perangkat Lunak (BNSP)</div>
-      <div class="skill">Cyber Security Industry Outlook</div>
-      <div class="skill">Website Development: Front End</div>
-      <div class="skill">SEO & Content Writing</div>
-    </div>
-  </section>
-
-  <section id="experience" class="projects">
-    <h3 class="section-title">Pengalaman & Proyek Utama</h3>
-    <div class="project-list">
-      <div class="project" onclick="openPopup(0)">
-        <h4>Magang di UPSPLL DISHUB</h4>
-        <p>Pengalaman magang dengan tugas Monitoring Jaringan, Mendukung Tim IT dalam Pemeliharaan Infrastruktur, dan Entry Data.</p>
-      </div>
-      <div class="project" onclick="openPopup(1)">
-        <h4>Skripsi: Perancangan Program Manajemen Reservasi Kunjungan Berbasis Web</h4>
-        <p>Proyek akhir di UPSPLL Dinas Perhubungan DKI Jakarta. Menampilkan keahlian Web Programming dan Manajemen Proyek.</p>
-      </div>
-      <div class="project" onclick="openPopup(2)">
-        <h4>Sertifikasi Pengembang Perangkat Lunak (BNSP)</h4>
-        <p>Kompeten dalam bidang Pengembang Perangkat Lunak dengan kualifikasi Analis Program.</p>
-      </div>
-      <div class="project" onclick="openPopup(3)">
-        <h4>Sertifikasi Network Security (Cisco)</h4>
-        <p>Menyelesaikan kursus Cisco Network Security, mengenal konsep keamanan jaringan, router security, dan implementasi firewall.</p>
-      </div>
-      <div class="project" onclick="openPopup(4)">
-        <h4>Sertifikasi Software engineering</h4>
-        <p>Menyelesaikan short class dalam waktu 1 minggu dan diberikan tugas untuk membuat web Portofolio.</p>
-      </div>
-      <div class="project" onclick="openPopup(5)">
-        <h4>Sertifikasi TOEFL</h4>
-        <p>Mengikuti salah satu persyaratan kelulusam di UBSI dengan mengikuti test TOEFL.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="contact">
-    <h3 class="section-title">Kontak</h3>
-    <p style="text-align:center; color:#ccc;">Hubungi saya melalui:</p>
-    <p style="text-align:center; margin-top:10px;">
-        WhatsApp:   <a href="https://wa.me/6285711042402" style="color:#00bfff;">+62 857 1104 2402</a><br>
-        LinkedIn: <a href="https://linkedin.com/in/muhamadnursaifuddin" style="color:#00bfff;">Muhamad Nur Saifuddin</a><br>
-        Email: <a href="mailto:mnsaifuddin68@gmail.com" style="color:#00bfff;">mnsaifuddin68@gmail.com</a><br>
-      Alamat: Jalan Jembatan 2 Barat, Kel. Angke Kec. Tambora, Jakarta Barat
-    </p>
-  </section>
-
-  <footer>
-    <p> 2025 Muhamad Nur Saifuddin.</p>
-  </footer>
-
-  <div class="popup" id="popup">
-    <span class="close-btn" onclick="closePopup()">&times;</span>
-    <img id="popupImage" src="" alt="Project Image">
-    <div class="controls">
-      <button onclick="prevImage()"> Sebelumnya</button>
-      <button onclick="nextImage()"> Selanjutnya</button>
-    </div>
-    <a id="githubLink" href="#" target="_blank">Lihat Detail</a>
-  </div>
-
-  <script>
-    // Logika Popup 
-    const projects = [
-      { images: ["atcs.jpg"], github: "#contact" },
-      { images: ["reservasi (1).png", "reservasi (2).png", "reservasi (3).png", "reservasi (4).png"], github: "https://github.com/fuddin6/Sistem-Manajemen-Reservasi" },
-      { images: ["bnsp.jpg", "bnsp2.jpg"], github: "#contact" },
-      { images: ["cisco.png"], github: "#contact" },
-      { images: ["software_engineering.jpg"], github: "https://github.com/fuddin6/CodingCamp-220925-Muhamad-Nur-Saifuddin" },
-      { images: ["toefl.png"], github: "#contact" },
-    ];
-
-    let currentProject = 0;
-    let currentImageIndex = 0;
-    const popupElement = document.getElementById('popup');
-
-    function openPopup(index) {
-      currentProject = index;
-      currentImageIndex = 0;
-      popupElement.style.display = 'flex'; 
-      setTimeout(() => {
-        popupElement.classList.add('open');
-      }, 10); 
-      updatePopup();
-    }
-
-    function closePopup() {
-      popupElement.classList.remove('open');
-      setTimeout(() => {
-          popupElement.style.display = 'none';
-      }, 400); 
-    }
-
-    function updatePopup() {
-      const popupImage = document.getElementById('popupImage');
-      const githubLink = document.getElementById('githubLink');
-      const prevButton = document.querySelector('.controls button:first-child');
-      const nextButton = document.querySelector('.controls button:last-child');
-
-      if (projects[currentProject].images.length > 1) {
-          prevButton.style.display = 'inline-block';
-          nextButton.style.display = 'inline-block';
-      } else {
-          prevButton.style.display = 'none';
-          nextButton.style.display = 'none';
-      }
-      
-      popupImage.src = projects[currentProject].images[currentImageIndex];
-      githubLink.href = projects[currentProject].github;
-      
-      if (projects[currentProject].github.includes("github.com")) {
-        githubLink.textContent = "Lihat Code di GitHub";
-      } else if (projects[currentProject].github.includes("#contact")) {
-        githubLink.textContent = "Hubungi Saya untuk Detail";
-      } else {
-        githubLink.textContent = "Lihat Detail (Link Eksternal)";
-      }
-    }
-
-    function nextImage() {
-      currentImageIndex = (currentImageIndex + 1) % projects[currentProject].images.length;
-      updatePopup();
-    }
-
-    function prevImage() {
-      currentImageIndex = (currentImageIndex - 1 + projects[currentProject].images.length) % projects[currentProject].images.length;
-      updatePopup();
-    }
-    
-    // Logika Fade-In Section
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const sections = document.querySelectorAll('.hero, section');
-      sections.forEach((section, index) => {
-          setTimeout(() => {
-            section.classList.add('loaded');
-          }, 100 * (index + 1)); 
-      });
-
-      // INISIALISASI CAROUSEL GAMBAR WAJAH
-      startPhotoCarousel();
-    });
-
-
-    // FUNGSI CAROUSEL GAMBAR WAJAH
-    function startPhotoCarousel() {
-        const carousel = document.getElementById('heroPhotoCarousel');
-        const images = carousel.querySelectorAll('img');
-        let currentPhotoIndex = 0;
-        const totalPhotos = images.length;
-
-        function nextPhoto() {
-            // Sembunyikan gambar saat ini
-            images[currentPhotoIndex].classList.remove('active');
-            
-            // Pindah ke gambar berikutnya
-            currentPhotoIndex = (currentPhotoIndex + 1) % totalPhotos;
-            
-            // Tampilkan gambar berikutnya
-            images[currentPhotoIndex].classList.add('active');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhamad Nur Saifuddin | IT Support & Operations Specialist, Web3-Aware</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
+    <style>
+        /* ========================================================= */
+        /* 1. RESET DAN FONDASI */
+        /* ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #0d0d0d;
+            color: #f1f1f1;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* ========================================================= */
+        /* 2. HEADER & NAVIGASI */
+        /* ========================================================= */
+        header {
+            background: #111;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
-        // Ganti gambar setiap 4 detik (4000 milidetik)
-        setInterval(nextPhoto, 4000); 
-    }
-  </script>
+        header h1 {
+            color: #f1f1f1; 
+            font-size: 1.4em; 
+            font-weight: 700;
+        }
+        header h1 span {
+            color: #00bfff;
+        }
+
+        /* Navigasi Desktop */
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        nav a {
+            color: #f1f1f1;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+        }
+        nav a:hover {
+            color: #00bfff;
+        }
+        
+        /* Tombol Ganti Bahasa */
+        #language-switch {
+            background: #00bfff;
+            color: #0d0d0d;
+            border: none;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s;
+            font-weight: 500;
+            margin-left: 20px;
+        }
+        #language-switch:hover {
+            background: #009acd;
+            transform: scale(1.05);
+        }
+
+        /* Hamburger Icon (tersembunyi di desktop) */
+        .menu-toggle {
+            display: none; 
+            font-size: 2em;
+            cursor: pointer;
+            color: #00bfff;
+            line-height: 1;
+            z-index: 1001;
+        }
+        
+        /* ========================================================= */
+        /* 3. TRANSISI DAN LAYOUT UMUM */
+        /* ========================================================= */
+        .hero, section {
+            opacity: 0; 
+            transform: translateY(20px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
+        }
+        
+        .hero.loaded, section.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section {
+            padding: 60px 50px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h3.section-title {
+            font-size: 1.8em;
+            color: #00bfff;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        
+        /* ========================================================= */
+        /* 4. HERO SECTION */
+        /* ========================================================= */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 90vh;
+            padding: 40px 20px;
+        } 
+        
+        .hero-photo-carousel {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 50%;
+            border: 4px solid #00bfff;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+        }
+
+        .hero-photo-carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out; 
+        }
+
+        .hero-photo-carousel img.active {
+            opacity: 1;
+        }
+
+        .hero h2 {
+            font-size: 2.5em;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .hero p {
+            max-width: 700px;
+            margin: 15px auto;
+            color: #ccc;
+            font-size: 1.1em;
+        }
+
+        .hero button {
+            background: #00bfff;
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s;
+        }
+        .hero button:hover {
+            background: #009acd;
+            transform: translateY(-2px);
+        }
+        
+        /* ========================================================= */
+        /* 5. ABOUT SECTION */
+        /* ========================================================= */
+        .about p {
+            text-align: justify;
+            color: #ccc;
+            font-size: 1.1em;
+        }
+
+        /* ========================================================= */
+        /* 6. SKILLS SECTION */
+        /* ========================================================= */
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .skill {
+            background: #111;
+            padding: 8px 18px;
+            border: 1px solid #00bfff;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.9em;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .skill:hover {
+            background: #00bfff;
+            color: #0d0d0d;
+        }
+
+        /* ========================================================= */
+        /* 7. PROJECTS/EXPERIENCE SECTION */
+        /* ========================================================= */
+        .project-list {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .project {
+            background: #111;
+            padding: 25px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, border 0.3s ease, box-shadow 0.3s;
+            cursor: pointer;
+            min-height: 150px;
+        }
+
+        .project:hover {
+            transform: translateY(-5px);
+            border: 1px solid #00bfff;
+            box-shadow: 0 5px 15px rgba(0, 191, 255, 0.2);
+        }
+
+        .project h4 {
+            color: #00bfff;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        .project p {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        /* ========================================================= */
+        /* 8. KONTAK SECTION */
+        /* ========================================================= */
+        .contact p a {
+            font-weight: 500;
+        }
+        
+        /* ========================================================= */
+        /* 9. FOOTER */
+        /* ========================================================= */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #222;
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        /* ========================================================= */
+        /* 10. POPUP STYLES */
+        /* ========================================================= */
+        .popup {
+            display: none; 
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            opacity: 0; 
+            visibility: hidden; 
+            transition: opacity 0.4s ease, visibility 0.4s ease; 
+            padding: 20px;
+        }
+        
+        .popup.open {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .popup img {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: contain;
+            max-height: 70vh;
+        }
+
+        .popup .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        /* Tombol Silang (Close Button) */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 2.5em; /* Ukuran diperbesar sedikit agar lebih mudah diklik */
+            cursor: pointer;
+            transition: color 0.3s ease;
+            line-height: 1;
+        }
+        .close-btn:hover {
+            color: #00bfff;
+        }
+        
+        .popup a {
+            margin-top: 20px;
+            color: #00bfff;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+        .popup a:hover {
+            color: #fff;
+        }
+
+        /* ========================================================= */
+        /* 11. RESPONSIVE (MEDIA QUERIES) */
+        /* ========================================================= */
+        @media (max-width: 900px) {
+            header {
+                padding: 15px 25px;
+            }
+            .hero h2 {
+                font-size: 2.2em;
+            }
+            section {
+                padding: 40px 25px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            nav {
+                display: none; 
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(17, 17, 17, 0.95); 
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                z-index: 999; 
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+
+            nav.open {
+                display: flex;
+                opacity: 1;
+                pointer-events: all;
+            }
+            
+            nav a {
+                font-size: 1.5em;
+                margin: 15px 0;
+                padding: 10px 20px;
+                width: 80%;
+                text-align: center;
+                border-bottom: 1px solid rgba(0, 191, 255, 0.3); 
+                margin-left: 0;
+            }
+            nav a:last-child {
+                border-bottom: none;
+            }
+            
+            #language-switch {
+                margin-top: 20px;
+                margin-left: 0;
+                width: 80%;
+            }
+            
+            .hero {
+                min-height: 80vh;
+            }
+            .hero h2 {
+                font-size: 1.8em;
+            }
+            .hero p {
+                font-size: 1em;
+            }
+            
+            h3.section-title {
+                font-size: 1.5em;
+            }
+
+            .project-list {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .popup img {
+                width: 90%;
+            }
+            
+            .close-btn {
+                font-size: 2em;
+                top: 15px;
+                right: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 15px 15px;
+            }
+            .hero h2 {
+                font-size: 1.6em;
+            }
+            section {
+                padding: 30px 15px;
+            }
+            .project-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>M.N. <span>Saifuddin</span></h1> 
+        
+        <nav id="mainNav">
+            <a href="#about" class="nav-link" data-id="nav-about">Tentang Saya</a>
+            <a href="#skills" class="nav-link" data-id="nav-skills">Keahlian</a>
+            <a href="#experience" class="nav-link" data-id="nav-experience">Pengalaman</a> 
+            <a href="#projects" class="nav-link" data-id="nav-projects">Pencapaian</a> 
+            <a href="#contact" class="nav-link" data-id="nav-contact">Kontak</a>
+            <button id="language-switch" data-lang="id">EN</button>
+        </nav>
+        
+        <div class="menu-toggle" id="menuToggle">☰</div>
+        
+    </header>
+
+    <main id="content-container">
+
+        <section class="hero">
+            <div class="hero-photo-carousel" id="heroPhotoCarousel">
+                <img src="bg-photo-1.jpg" alt="Foto Wajah Muhamad Nur Saifuddin 1" class="active">
+                <img src="bg-photo-2.jpg" alt="Foto Wajah Muhamad Nur Saifuddin 2" loading="lazy">
+            </div>
+            
+            <div class="bilingual-content" data-lang="id">
+                <h2>Membawa Fondasi IT & Dukungan Teknis untuk Inovasi Digital.</h2>
+                <p>Lulusan S.Kom yang menguasai Jaringan, Troubleshooting, dan Pemeliharaan Sistem. Berfokus pada keandalan sistem dan efisiensi operasional. Siap mendukung infrastruktur perusahaan Web3 dengan pemahaman teknologi AI dan kesiapan belajar yang tinggi.</p>
+                <button onclick="window.location='#experience'">Lihat Pengalaman Kerja Saya</button>
+            </div>
+            <div class="bilingual-content" data-lang="en" style="display:none;">
+                <h2>Providing IT Foundations & Technical Support for Digital Innovation.</h2>
+                <p>A fresh graduate (S.Kom) proficient in Network Troubleshooting and System Maintenance. Focused on system reliability and operational efficiency. Ready to support the infrastructure of Web3 companies, utilizing AI tools and demonstrating a high eagerness to learn.</p>
+                <button onclick="window.location='#experience'">View My Work Experience</button>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <h3 class="section-title" data-lang-id="Tentang Saya" data-lang-en="About Me">Tentang Saya</h3>
+            
+            <div class="bilingual-content" data-lang="id">
+                <p>
+                    Saya adalah Lulusan S1 Teknologi Informasi (S.Kom) dari Universitas Bina Sarana Informatika. Saya memiliki fokus kuat pada Infrastruktur IT, pemeliharaan sistem, dan pengembangan front-end dasar. 
+                    Secara teknis, saya menguasai Fundamental Jaringan, Analisis Masalah, dan tools pendukung IT. Saya juga berkomitmen untuk memanfaatkan Kecerdasan Buatan (AI) guna meningkatkan efisiensi kerja. Soft skill saya mencakup Komunikasi yang baik, Problem Solving, dan Kolaborasi Tim, sangat penting untuk peran support dan operasional.
+                </p>
+            </div>
+            <div class="bilingual-content" data-lang="en" style="display:none;">
+                <p>
+                    I am a Bachelor of Information Technology (S.Kom) graduate from Bina Sarana Informatika University. My primary focus is on IT Infrastructure, system maintenance, and basic front-end development.
+                    Technically, I am proficient in Network Fundamentals, Problem Analysis, and essential IT support tools. I am also committed to leveraging Artificial Intelligence (AI) tools to enhance work efficiency. My soft skills include excellent Communication, Problem Solving, and Team Collaboration, which are crucial for support and operational roles.
+                </p>
+            </div>
+        </section>
+
+        <section id="skills" class="skills">
+            <h3 class="section-title" data-lang-id="Keahlian Teknis & Operasional" data-lang-en="Technical & Operational Skills">Keahlian Teknis & Operasional</h3>
+            <div class="skills-list">
+                <div class="skill" data-lang-id="Fundamental Jaringan (Troubleshooting)" data-lang-en="Network Fundamentals (Troubleshooting)">Fundamental Jaringan (Troubleshooting)</div> 
+                <div class="skill" data-lang-id="Pemeliharaan & Operasional Sistem" data-lang-en="System Maintenance & Operations">Pemeliharaan & Operasional Sistem</div>
+                <div class="skill" data-lang-id="Dasar Pemrograman (Analisis Bug)" data-lang-en="Basic Programming (Bug Analysis)">Dasar Pemrograman (Analisis Bug)</div>
+                <div class="skill" data-lang-id="UI/UX Design (Wireframing/Mockup)" data-lang-en="UI/UX Design (Wireframing/Mockup)">UI/UX Design (Wireframing/Mockup)</div>
+                <div class="skill" data-lang-id="Git & GitHub (Dokumentasi Code)" data-lang-en="Git & GitHub (Code Documentation)">Git & GitHub (Dokumentasi Code)</div>
+                <div class="skill" data-lang-id="Terminologi Dasar Web3 & Blockchain" data-lang-en="Web3 & Blockchain Basic Terminology">Terminologi Dasar Web3 & Blockchain</div> 
+                <div class="skill" data-lang-id="Dokumentasi Teknis" data-lang-en="Technical Documentation">Dokumentasi Teknis</div>
+                <div class="skill" data-lang-id="Microsoft Office Suite & Data Entry" data-lang-en="Microsoft Office Suite & Data Entry">Microsoft Office Suite & Data Entry</div>
+                <div class="skill" data-lang-id="Network Security (Cisco)" data-lang-en="Network Security (Cisco)">Network Security (Cisco)</div>
+                <div class="skill" data-lang-id="Pemanfaatan Tools AI (Efisensi)" data-lang-en="AI Tools Utilization (Efficiency)">Pemanfaatan Tools AI (Efisensi)</div>
+            </div>
+        </section>
+        
+        <section id="experience" class="projects">
+            <h3 class="section-title" data-lang-id="Pengalaman Kerja & Magang" data-lang-en="Work Experience & Internship">Pengalaman Kerja & Magang</h3>
+            <div class="project-list">
+                <div class="project" onclick="openPopup(0)">
+                    <h4 data-lang-id="Magang: Dukungan Infrastruktur di UPSPLL DISHUB" data-lang-en="Internship: Infrastructure Support at UPSPLL DISHUB">Magang: Dukungan Infrastruktur di UPSPLL DISHUB</h4>
+                    <p class="project-desc" data-lang-id="Bertanggung jawab atas Pemeliharaan dan Monitoring sistem jaringan, serta memberikan dukungan teknis kepada tim IT dalam menjaga keandalan infrastruktur." data-lang-en="Responsible for Network system Maintenance and Monitoring, providing technical support to the IT team to ensure infrastructure reliability.">Bertanggung jawab atas Pemeliharaan dan Monitoring sistem jaringan, serta memberikan dukungan teknis kepada tim IT dalam menjaga keandalan infrastruktur.</p>
+                </div>
+                <div class="project" onclick="openPopup(1)">
+                    <h4 data-lang-id="Skripsi: Perancangan Program Manajemen Reservasi Web" data-lang-en="Thesis: Web-Based Reservation Management System Design">Skripsi: Perancangan Program Manajemen Reservasi Web</h4>
+                    <p class="project-desc" data-lang-id="Pengembangan sistem front-end dan back-end dasar untuk efisiensi data, menunjukkan kemampuan Full Stack Awareness dan manajemen proyek." data-lang-en="Development of basic front-end and back-end systems for data efficiency, demonstrating Full Stack Awareness and project management skills.">Pengembangan sistem front-end dan back-end dasar untuk efisiensi data, menunjukkan kemampuan Full Stack Awareness dan manajemen proyek.</p>
+                </div>
+                <div class="project" onclick="openPopup(2)">
+                    <h4 data-lang-id="Membuat AI Crypto Analyzer" data-lang-en="Building an AI Crypto Analyzer">AI Crypto Analyzer</h4>
+                    <p class="project-desc" data-lang-id="website ini dibuat dengan tujuan mempermudah trader pemula dalam melakukan analisa market" data-lang-en="This website was created to make it easier for beginner traders to conduct market analysis.">website ini dibuat dengan tujuan mempermudah trader pemula dalam melakukan analisa market</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects"> 
+            <h3 class="section-title" data-lang-id="Sertifikasi & Pencapaian Utama" data-lang-en="Key Certifications & Achievements">Sertifikasi & Pencapaian Utama</h3>
+            <div class="project-list">
+                <div class="project" onclick="openPopup(3)">
+                    <h4 data-lang-id="Sertifikasi BNSP Pengembang Perangkat Lunak" data-lang-en="BNSP Software Developer Certification">Sertifikasi BNSP Pengembang Perangkat Lunak</h4>
+                    <p class="project-desc" data-lang-id="Kompeten dalam proses Software Development Life Cycle (SDLC) dengan kualifikasi Analis Program." data-lang-en="Competent in the Software Development Life Cycle (SDLC) process with Program Analyst qualification.">Kompeten dalam proses Software Development Life Cycle (SDLC) dengan kualifikasi Analis Program.</p>
+                </div>
+                <div class="project" onclick="openPopup(4)">
+                    <h4 data-lang-id="Sertifikasi Network Security (Cisco)" data-lang-en="Network Security Certification (Cisco)">Sertifikasi Network Security (Cisco)</h4>
+                    <p class="project-desc" data-lang-id="Pemahaman mendalam tentang keamanan jaringan, penting untuk lingkungan IT manapun, termasuk Web3." data-lang-en="In-depth understanding of network security, essential for any IT environment, including Web3.">Pemahaman mendalam tentang keamanan jaringan, penting untuk lingkungan IT manapun, termasuk Web3.</p>
+                </div>
+                <div class="project" onclick="openPopup(5)">
+                    <h4 data-lang-id="Portofolio Web (Demonstrasi Front-End)" data-lang-en="Web Portfolio (Front-End Demonstration)">Portofolio Web (Demonstrasi Front-End)</h4>
+                    <p class="project-desc" data-lang-id="Dibuat menggunakan HTML, CSS, JS, menunjukkan kemampuan belajar cepat dan implementasi dasar web development." data-lang-en="Built using HTML, CSS, and JS, demonstrating fast learning ability and basic web development implementation.">Dibuat menggunakan HTML, CSS, JS, menunjukkan kemampuan belajar cepat dan implementasi dasar web development.</p>
+                </div>
+                <div class="project" onclick="openPopup(6)">
+                    <h4 data-lang-id="Sertifikasi Kemampuan Bahasa Inggris (TOEFL)" data-lang-en="English Proficiency Certification (TOEFL)">Sertifikasi Kemampuan Bahasa Inggris (TOEFL)</h4>
+                    <p class="project-desc" data-lang-id="Lolos tes kemampuan bahasa Inggris, mendukung komunikasi di lingkungan kerja internasional (Web3)." data-lang-en="Passed the English proficiency test, supporting communication in international work environments (Web3).">Lolos tes kemampuan bahasa Inggris, mendukung komunikasi di lingkungan kerja internasional (Web3).</p>
+                </div>
+                <div class="project" onclick="openPopup(7)">
+                    <h4 data-lang-id="Sertifikasi Microsoft Office Specialist" data-lang-en="Microsoft Office Specialist Certification">Sertifikasi Microsoft Office Specialist</h4>
+                    <p class="project-desc" data-lang-id="Menguasai aplikasi Microsoft Office untuk efisiensi administrasi dan pengolahan data, vital untuk operasional." data-lang-en="Proficient in Microsoft Office applications for administrative efficiency and data processing, vital for operations.">Menguasai aplikasi Microsoft Office untuk efisiensi administrasi dan pengolahan data, vital untuk operasional.</p>
+                </div>
+                <div class="project" onclick="openPopup(8)">
+                    <h4 data-lang-id="Sertifikasi SEO & Content Writing" data-lang-en="SEO & Content Writing Certification">Sertifikasi SEO & Content Writing</h4>
+                    <p class="project-desc" data-lang-id="Meningkatkan visibilitas digital dan kemampuan membuat konten informatif, relevan untuk Technical Writer atau Community Manager." data-lang-en="Enhancing digital visibility and ability to create informative content, relevant for Technical Writer or Community Manager roles.">Meningkatkan visibilitas digital dan kemampuan membuat konten informatif, relevan untuk Technical Writer atau Community Manager.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <h3 class="section-title" data-lang-id="Mari Terhubung" data-lang-en="Let's Connect">Mari Terhubung</h3>
+            
+            <div class="bilingual-content" data-lang="id">
+                <p style="text-align:center; color:#ccc;">Saya antusias untuk mempelajari peluang di berbagai peran Dukungan, Operasional, atau Administrasi di perusahaan Web3. Silakan hubungi saya:</p>
+            </div>
+            <div class="bilingual-content" data-lang="en" style="display:none;">
+                <p style="text-align:center; color:#ccc;">I am eager to explore opportunities in various Support, Operational, or Administrative roles within Web3 companies. Please contact me:</p>
+            </div>
+            
+            <p style="text-align:center; margin-top:10px;">
+                WhatsApp: <a href="https://wa.me/6285711042402" style="color:#00bfff;">+62 857 1104 2402</a><br>
+                LinkedIn: <a href="https://linkedin.com/in/muhamadnursaifuddin" style="color:#00bfff;">Muhamad Nur Saifuddin</a><br>
+                Email: <a href="mailto:mnsaifuddin68@gmail.com" style="color:#00bfff;">mnsaifuddin68@gmail.com</a><br>
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><span class="footer-text" data-lang-id="Hak Cipta © 2025 Muhamad Nur Saifuddin." data-lang-en="Copyright © 2025 Muhamad Nur Saifuddin.">Hak Cipta © 2025 Muhamad Nur Saifuddin.</span></p>
+    </footer>
+
+    <div class="popup" id="popup">
+        <span class="close-btn" onclick="closePopup()">&times;</span> 
+        <img id="popupImage" src="" alt="Project Image">
+        <div class="controls">
+            <button id="prev-btn" onclick="prevImage()"></button>
+            <button id="next-btn" onclick="nextImage()"></button>
+        </div>
+        <a id="githubLink" href="#"></a> 
+    </div>
+
+    <script>
+        const translations = {
+            'nav-about': { id: 'Tentang Saya', en: 'About Me' },
+            'nav-skills': { id: 'Keahlian', en: 'Skills' },
+            'nav-experience': { id: 'Pengalaman', en: 'Experience' },
+            'nav-projects': { id: 'Pencapaian', en: 'Achievements' },
+            'nav-contact': { id: 'Kontak', en: 'Contact' },
+            'popup-prev': { id: 'Sebelumnya', en: 'Previous' },
+            'popup-next': { id: 'Selanjutnya', en: 'Next' }
+        };
+
+        let currentLang = 'id';
+        const switchButton = document.getElementById('language-switch');
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const dataId = link.getAttribute('data-id');
+                link.textContent = translations[dataId][lang];
+            });
+            document.querySelector('.footer-text').textContent = document.querySelector('.footer-text').getAttribute(`data-lang-${lang}`);
+
+            document.querySelectorAll('.section-title, .skill').forEach(el => {
+                const text = el.getAttribute(`data-lang-${lang}`);
+                if (text) { el.textContent = text; }
+            });
+            
+            document.querySelectorAll('.project h4, .project-desc').forEach(el => {
+                const text = el.getAttribute(`data-lang-${lang}`);
+                if (text) { el.textContent = text; }
+            });
+
+            document.getElementById('prev-btn').textContent = translations['popup-prev'][lang];
+            document.getElementById('next-btn').textContent = translations['popup-next'][lang];
+
+            document.querySelectorAll('.bilingual-content').forEach(content => {
+                if (content.getAttribute('data-lang') === lang) {
+                    content.style.display = 'block';
+                } else {
+                    content.style.display = 'none';
+                }
+            });
+
+            if (lang === 'id') {
+                switchButton.textContent = 'EN';
+                switchButton.setAttribute('data-lang', 'id');
+                document.title = 'Muhamad Nur Saifuddin | Spesialis IT & Operasional, Sadar Web3';
+            } else {
+                switchButton.textContent = 'ID';
+                switchButton.setAttribute('data-lang', 'en');
+                document.title = 'Muhamad Nur Saifuddin | IT Support & Operations Specialist, Web3-Aware';
+            }
+            
+            updatePopupText(lang);
+        }
+
+        switchButton.addEventListener('click', () => {
+            const newLang = currentLang === 'id' ? 'en' : 'id';
+            setLanguage(newLang);
+        });
+
+        // --- LOGIKA HAMBURGER MENU ---
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+        const navLinks = mainNav.querySelectorAll('a');
+
+        menuToggle.addEventListener('click', function() {
+            mainNav.classList.toggle('open');
+            menuToggle.innerHTML = mainNav.classList.contains('open') ? '✕' : '☰';
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    mainNav.classList.remove('open');
+                    menuToggle.innerHTML = '☰';
+                }
+            });
+        });
+
+        // Logika Popup (Tidak ada perubahan data)
+        const projects = [
+            { images: ["atcs.jpg"], github: "#contact" }, 
+            { images: ["reservasi (1).png", "reservasi (2).png", "reservasi (3).png", "reservasi (4).png"], github: "https://github.com/fuddin6/Sistem-Manajemen-Reservasi" },
+            { images: ["nextjs.jpg"], github: "https://my-nextjs-app-six-tau.vercel.app/" },
+            { images: ["bnsp.jpg", "bnsp2.jpg"], github: "#contact" },
+            { images: ["cisco.png"], github: "#contact" },
+            { images: ["software_engineering.jpg"], github: "https://github.com/fuddin6/CodingCamp-220925-Muhamad-Nur-Saifuddin" },
+            { images: ["toefl.png"], github: "#contact" },
+            { images: ["microsoft.jpg"], github: "#contact" }, 
+            { images: ["seo&contentwriting.jpg"], github: "#contact" },
+
+        ];
+
+        let currentProject = 0;
+        let currentImageIndex = 0;
+        const popupElement = document.getElementById('popup');
+
+        function updatePopupText(lang) {
+            const githubLink = document.getElementById('githubLink');
+            
+            if (projects[currentProject] && projects[currentProject].github.includes("github.com")) {
+                githubLink.textContent = lang === 'id' ? "Lihat Code di GitHub" : "View Code on GitHub";
+            } else if (projects[currentProject] && projects[currentProject].github.includes("#contact")) {
+                githubLink.textContent = lang === 'id' ? "Hubungi Saya untuk Detail" : "Contact Me for Details";
+            } else {
+                githubLink.textContent = lang === 'id' ? "Lihat Detail (Link Eksternal)" : "View Details (External Link)";
+            }
+            
+            // Tambahkan TARGET agar tidak BLANK, hanya jika link bukan #contact
+            if (!projects[currentProject].github.includes("#contact")) {
+                githubLink.setAttribute('target', '_self'); // Mengubahnya menjadi '_self' (default)
+            } else {
+                 githubLink.removeAttribute('target');
+            }
+        }
+
+        function openPopup(index) {
+            currentProject = index;
+            currentImageIndex = 0;
+            popupElement.style.display = 'flex'; 
+            setTimeout(() => {
+                popupElement.classList.add('open');
+            }, 10); 
+            updatePopup();
+            updatePopupText(currentLang);
+            // Tambahkan event listener untuk tombol ESCAPE
+            document.addEventListener('keydown', handleEscapeKey);
+        }
+
+        function closePopup() {
+            popupElement.classList.remove('open');
+            setTimeout(() => {
+                popupElement.style.display = 'none';
+            }, 400); 
+             // Hapus event listener saat popup ditutup
+            document.removeEventListener('keydown', handleEscapeKey);
+        }
+        
+        // Fungsi untuk menutup popup menggunakan tombol ESC
+        function handleEscapeKey(event) {
+            if (event.key === 'Escape') {
+                closePopup();
+            }
+        }
+
+        function updatePopup() {
+            const popupImage = document.getElementById('popupImage');
+            const prevButton = document.getElementById('prev-btn');
+            const nextButton = document.getElementById('next-btn');
+
+            if (projects[currentProject].images.length > 1) {
+                prevButton.style.display = 'inline-block';
+                nextButton.style.display = 'inline-block';
+            } else {
+                prevButton.style.display = 'none';
+                nextButton.style.display = 'none';
+            }
+            
+            popupImage.src = projects[currentProject].images[currentImageIndex];
+            document.getElementById('githubLink').href = projects[currentProject].github;
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % projects[currentProject].images.length;
+            updatePopup();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + projects[currentProject].images.length) % projects[currentProject].images.length;
+            updatePopup();
+        }
+        
+        function startPhotoCarousel() {
+            const carousel = document.getElementById('heroPhotoCarousel');
+            if (!carousel) return;
+            
+            const images = carousel.querySelectorAll('img');
+            let currentPhotoIndex = 0;
+            const totalPhotos = images.length;
+
+            function nextPhoto() {
+                images[currentPhotoIndex].classList.remove('active');
+                currentPhotoIndex = (currentPhotoIndex + 1) % totalPhotos;
+                images[currentPhotoIndex].classList.add('active');
+            }
+
+            setInterval(nextPhoto, 4000); 
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            setLanguage('id'); 
+            
+            const sections = document.querySelectorAll('.hero, section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.classList.add('loaded');
+                }, 100 * (index + 1)); 
+            });
+
+            startPhotoCarousel();
+            
+            // Tambahkan event listener untuk menutup popup saat mengklik di luar gambar
+            popupElement.addEventListener('click', function(event) {
+                // Pastikan yang diklik adalah background popup (bukan gambar atau tombol di dalamnya)
+                if (event.target === popupElement) {
+                    closePopup();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

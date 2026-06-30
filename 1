@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portofolio Muhamad Nur Saifuddin - Teknologi Informasi</title>
+  <style>
+    /* Styling yang sudah DIBERSIHKAN dari karakter yang tidak valid */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #0d0d0d;
+      color: #f1f1f1;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #111;
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      color: #00bfff;
+      font-size: 1.5em;
+      letter-spacing: 1px;
+    }
+
+    nav a {
+      color: #f1f1f1;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #00bfff;
+    }
+
+    .hero, section {
+      opacity: 0; 
+      transform: translateY(20px); 
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
+    }
+    
+    .hero.loaded, section.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 90vh;
+      padding: 0 20px;
+    } 
+    
+    /* STYLING FOTO WAJAH (CAROUSEL) */
+    .hero-photo-carousel {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        border-radius: 50%;
+        border: 4px solid #00bfff;
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .hero-photo-carousel img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 1s ease-in-out; 
+    }
+
+    .hero-photo-carousel img.active {
+        opacity: 1;
+    }
+    /* AKHIR STYLING FOTO WAJAH */
+
+    .hero h2 {
+      font-size: 2.5em;
+      color: #fff;
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: 15px 0;
+      color: #ccc;
+    }
+
+    .hero button {
+      background: #00bfff;
+      color: #fff;
+      border: none;
+      padding: 10px 25px;
+      font-size: 1em;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .hero button:hover {
+      background: #009acd;
+    }
+
+    section {
+      padding: 60px 50px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h3.section-title {
+      font-size: 1.8em;
+      color: #00bfff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .about p {
+      text-align: center;
+      color: #ccc;
+      font-size: 1.1em;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .skill {
+      background: #111;
+      padding: 10px 20px;
+      border: 1px solid #00bfff;
+      border-radius: 20px;
+      color: #fff;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .skill:hover {
+      background: #00bfff;
+      color: #0d0d0d;
+    }
+
+    .project-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .project {
+      background: #111;
+      padding: 20px;
+      border-radius: 10px;
+      transition: transform 0.3s ease, border 0.3s ease;
+      cursor: pointer;
+    }
+
+    .project:hover {
+      transform: translateY(-5px);
+      border: 1px solid #00bfff;
+    }
+
+    .project h4 {
+      color: #00bfff;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #222;
+      color: #999;
+      font-size: 0.9em;
+    }
+
+    .popup {
+      display: none; 
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      
+      opacity: 0; 
+      visibility: hidden; 
+      transition: opacity 0.4s ease, visibility 0.4s ease; 
+    }
+    
+    .popup.open {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .popup img {
+      width: 80%;
+      max-width: 600px;
+      border-radius: 10px;
+    }
+
+    .popup .controls {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .popup button {
+      background: #00bfff;
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .popup button:hover {
+      background: #009acd;
+    }
+
+    .popup a {
+      margin-top: 20px;
+      color: #00bfff;
+      text-decoration: none;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 2em;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    
+    .close-btn:hover {
+        color: #00bfff;
+    }
+
+    /* Responsif */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      nav {
+        margin-top: 10px;
+      }
+
+      .hero h2 {
+        font-size: 2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>M.N.Saifuddin</h1>
+    <nav>
+      <a href="#about">Tentang</a>
+      <a href="#skills">Skill</a>
+      <a href="#experience">Pengalaman</a>
+      <a href="#contact">Kontak</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-photo-carousel" id="heroPhotoCarousel">
+        <img src="bg-photo-1.jpg" alt="Foto Wajah Muhamad Nur Saifuddin 1" class="active">
+        <img src="bg-photo-2.jpg" alt="Foto Wajah Muhamad Nur Saifuddin 2">
+    </div>
+    <h2>Halo, Saya Muhamad Nur Saifuddin</h2>
+    <p>Lulusan S1 Teknologi Informasi dari Universitas Bina Sarana Informatika dengan pemahaman mendalam di bidang teknologi. Saya memiliki semangat tinggi untuk terus belajar dan berkembang, serta siap berkontribusi dalam lingkungan profesional yang dinamis.</p>
+    <button onclick="window.location='#experience'">Lihat Pengalaman Saya</button>
+  </section>
+
+  <section id="about" class="about">
+    <h3 class="section-title">Tentang Saya</h3>
+    <p>
+      Lulusan S1 Teknologi Informasi (S.Kom) dari Universitas Bina Sarana Informatika (2021-2025). 
+      Saya memiliki keahlian dalam teknis dalam Jaringan Dasar, Pemrograman Dasar, dan UI/UX Design. 
+      Saya juga menguasai soft skills Komunikasi yang baik, Kerja tim, dan Analisis masalah bersama.
+      Selain Bahasa Indonesia (Fasih), saya memiliki kemampuan Bahasa Inggris dan Arab tingkat Menengah.
+      Selain itu saya juga memiliki kemampuan untuk memanfaatkan teknologi AI untuk membantu pekerjaan saya dan mengembangkan ilmu yang saya punya.
+    </p>
+  </section>
+
+  <section id="skills" class="skills">
+    <h3 class="section-title">Keahlian & Tools</h3>
+    <div class="skills-list">
+      <div class="skill">Basic Jaringan Dasar</div>
+      <div class="skill">Basic Pemrograman Dasar</div>
+      <div class="skill">UI/UX Design</div>
+      
+      <div class="skill">Microsoft Office (Word, Excel, PowerPoint)</div>
+      <div class="skill">Visual Studio Code</div>
+      <div class="skill">Figma</div>
+      <div class="skill">Canva</div>
+      <div class="skill">Corel Draw</div>
+      
+      <div class="skill">Network Security (Cisco)</div>
+      <div class="skill">Pengembang Perangkat Lunak (BNSP)</div>
+      <div class="skill">Cyber Security Industry Outlook</div>
+      <div class="skill">Website Development: Front End</div>
+      <div class="skill">SEO & Content Writing</div>
+    </div>
+  </section>
+
+  <section id="experience" class="projects">
+    <h3 class="section-title">Pengalaman & Proyek Utama</h3>
+    <div class="project-list">
+      <div class="project" onclick="openPopup(0)">
+        <h4>Magang di UPSPLL DISHUB</h4>
+        <p>Pengalaman magang dengan tugas Monitoring Jaringan, Mendukung Tim IT dalam Pemeliharaan Infrastruktur, dan Entry Data.</p>
+      </div>
+      <div class="project" onclick="openPopup(1)">
+        <h4>Skripsi: Perancangan Program Manajemen Reservasi Kunjungan Berbasis Web</h4>
+        <p>Proyek akhir di UPSPLL Dinas Perhubungan DKI Jakarta. Menampilkan keahlian Web Programming dan Manajemen Proyek.</p>
+      </div>
+      <div class="project" onclick="openPopup(2)">
+        <h4>Sertifikasi Pengembang Perangkat Lunak (BNSP)</h4>
+        <p>Kompeten dalam bidang Pengembang Perangkat Lunak dengan kualifikasi Analis Program.</p>
+      </div>
+      <div class="project" onclick="openPopup(3)">
+        <h4>Sertifikasi Network Security (Cisco)</h4>
+        <p>Menyelesaikan kursus Cisco Network Security, mengenal konsep keamanan jaringan, router security, dan implementasi firewall.</p>
+      </div>
+      <div class="project" onclick="openPopup(4)">
+        <h4>Sertifikasi Software engineering</h4>
+        <p>Menyelesaikan short class dalam waktu 1 minggu dan diberikan tugas untuk membuat web Portofolio.</p>
+      </div>
+      <div class="project" onclick="openPopup(5)">
+        <h4>Sertifikasi TOEFL</h4>
+        <p>Mengikuti salah satu persyaratan kelulusam di UBSI dengan mengikuti test TOEFL.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h3 class="section-title">Kontak</h3>
+    <p style="text-align:center; color:#ccc;">Hubungi saya melalui:</p>
+    <p style="text-align:center; margin-top:10px;">
+        WhatsApp:   <a href="https://wa.me/6285711042402" style="color:#00bfff;">+62 857 1104 2402</a><br>
+        LinkedIn: <a href="https://linkedin.com/in/muhamadnursaifuddin" style="color:#00bfff;">Muhamad Nur Saifuddin</a><br>
+        Email: <a href="mailto:mnsaifuddin68@gmail.com" style="color:#00bfff;">mnsaifuddin68@gmail.com</a><br>
+      Alamat: Jalan Jembatan 2 Barat, Kel. Angke Kec. Tambora, Jakarta Barat
+    </p>
+  </section>
+
+  <footer>
+    <p> 2025 Muhamad Nur Saifuddin.</p>
+  </footer>
+
+  <div class="popup" id="popup">
+    <span class="close-btn" onclick="closePopup()">&times;</span>
+    <img id="popupImage" src="" alt="Project Image">
+    <div class="controls">
+      <button onclick="prevImage()"> Sebelumnya</button>
+      <button onclick="nextImage()"> Selanjutnya</button>
+    </div>
+    <a id="githubLink" href="#" target="_blank">Lihat Detail</a>
+  </div>
+
+  <script>
+    // Logika Popup 
+    const projects = [
+      { images: ["atcs.jpg"], github: "#contact" },
+      { images: ["reservasi (1).png", "reservasi (2).png", "reservasi (3).png", "reservasi (4).png"], github: "https://github.com/fuddin6/Sistem-Manajemen-Reservasi" },
+      { images: ["bnsp.jpg", "bnsp2.jpg"], github: "#contact" },
+      { images: ["cisco.png"], github: "#contact" },
+      { images: ["software_engineering.jpg"], github: "https://github.com/fuddin6/CodingCamp-220925-Muhamad-Nur-Saifuddin" },
+      { images: ["toefl.png"], github: "#contact" },
+    ];
+
+    let currentProject = 0;
+    let currentImageIndex = 0;
+    const popupElement = document.getElementById('popup');
+
+    function openPopup(index) {
+      currentProject = index;
+      currentImageIndex = 0;
+      popupElement.style.display = 'flex'; 
+      setTimeout(() => {
+        popupElement.classList.add('open');
+      }, 10); 
+      updatePopup();
+    }
+
+    function closePopup() {
+      popupElement.classList.remove('open');
+      setTimeout(() => {
+          popupElement.style.display = 'none';
+      }, 400); 
+    }
+
+    function updatePopup() {
+      const popupImage = document.getElementById('popupImage');
+      const githubLink = document.getElementById('githubLink');
+      const prevButton = document.querySelector('.controls button:first-child');
+      const nextButton = document.querySelector('.controls button:last-child');
+
+      if (projects[currentProject].images.length > 1) {
+          prevButton.style.display = 'inline-block';
+          nextButton.style.display = 'inline-block';
+      } else {
+          prevButton.style.display = 'none';
+          nextButton.style.display = 'none';
+      }
+      
+      popupImage.src = projects[currentProject].images[currentImageIndex];
+      githubLink.href = projects[currentProject].github;
+      
+      if (projects[currentProject].github.includes("github.com")) {
+        githubLink.textContent = "Lihat Code di GitHub";
+      } else if (projects[currentProject].github.includes("#contact")) {
+        githubLink.textContent = "Hubungi Saya untuk Detail";
+      } else {
+        githubLink.textContent = "Lihat Detail (Link Eksternal)";
+      }
+    }
+
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % projects[currentProject].images.length;
+      updatePopup();
+    }
+
+    function prevImage() {
+      currentImageIndex = (currentImageIndex - 1 + projects[currentProject].images.length) % projects[currentProject].images.length;
+      updatePopup();
+    }
+    
+    // Logika Fade-In Section
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const sections = document.querySelectorAll('.hero, section');
+      sections.forEach((section, index) => {
+          setTimeout(() => {
+            section.classList.add('loaded');
+          }, 100 * (index + 1)); 
+      });
+
+      // INISIALISASI CAROUSEL GAMBAR WAJAH
+      startPhotoCarousel();
+    });
+
+
+    // FUNGSI CAROUSEL GAMBAR WAJAH
+    function startPhotoCarousel() {
+        const carousel = document.getElementById('heroPhotoCarousel');
+        const images = carousel.querySelectorAll('img');
+        let currentPhotoIndex = 0;
+        const totalPhotos = images.length;
+
+        function nextPhoto() {
+            // Sembunyikan gambar saat ini
+            images[currentPhotoIndex].classList.remove('active');
+            
+            // Pindah ke gambar berikutnya
+            currentPhotoIndex = (currentPhotoIndex + 1) % totalPhotos;
+            
+            // Tampilkan gambar berikutnya
+            images[currentPhotoIndex].classList.add('active');
+        }
+
+        // Ganti gambar setiap 4 detik (4000 milidetik)
+        setInterval(nextPhoto, 4000); 
+    }
+  </script>
+</body>
+</html>
